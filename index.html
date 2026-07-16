@@ -38,5 +38,16 @@
     <audio id="musica"></audio>
 
     <script src="music.Js"></script>
+    <script src="music.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('¡Modo offline configurado!'))
+                    .catch(err => console.error('Error con el modo offline', err));
+            });
+        }
+    </script>
 </body>
 </html>
