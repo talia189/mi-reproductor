@@ -1,4 +1,4 @@
-// Lista de canciones oficiales para uso local y offline
+// Lista oficial de tus 12 canciones
 const playlist = [
   {
     title: "SUMMER EYES",
@@ -22,7 +22,7 @@ const playlist = [
     title: "Bed Of Roses",
     artist: "Bon Jovi",
     src: "./music/Bon Jovi - Bed Of Roses.mp3",
-    cover: "./Images/flores.jpg",
+    cover: "./Images/flores.jpg"
   },
   {
     title: "In These Arms",
@@ -80,37 +80,47 @@ const audio = new Audio();
 
 // Capturar los elementos HTML del reproductor
 const discoCont = document.getElementById('discoCont');
-const btnPlay = document.getElementById('btn-play');
-const btnNext = document.getElementById('btn-next');
-const btnPrev = document.getElementById('btn-prev');
+const btnPlay = document.getElementById('btnPlay');
+const btnNext = document.getElementById('btnNext');
+const btnPrev = document.getElementById('btnPrev');
 const srcPortada = document.getElementById('portada');
-const txtTitulo = document.getElementById('titulo-cancion');
-const txtArtista = document.getElementById('artista-cancion');
+const txtTitulo = document.getElementById('tituloC');
+const txtArtista = document.getElementById('artistaC');
+const txtEstado = document.getElementById('estado');
 
-// Función para cargar la información de la pista
+// Función para cargar la pista
 function loadTrack(index) {
     const track = playlist[index];
     audio.src = track.src;
     srcPortada.src = track.cover;
     txtTitulo.textContent = track.title;
     txtArtista.textContent = track.artist;
+    txtEstado.textContent = "READY";
 }
 
-// Función para alternar entre Reproducir y Pausar
+// Función para reproducir y pausar
 function togglePlay() {
     if (isPlaying) {
         audio.pause();
         discoCont.classList.remove('girando');
         btnPlay.textContent = 'PLAY';
+        txtEstado.textContent = "PAUSED";
     } else {
-        audio.play().catch(err => console.log("Error al reproducir audio:", err));
-        discoCont.classList.add('girando');
-        btnPlay.textContent = 'PAUSE';
+        audio.play()
+            .then(() => {
+                discoCont.classList.add('girando');
+                btnPlay.textContent = 'PAUSE';
+                txtEstado.textContent = "PLAYING";
+            })
+            .catch(err => {
+                console.log("Error al reproducir:", err);
+                txtEstado.textContent = "ERROR";
+            });
     }
     isPlaying = !isPlaying;
 }
 
-// Eventos de los botones de control
+// Eventos de los botones
 btnPlay.addEventListener('click', togglePlay);
 
 btnNext.addEventListener('click', () => {
@@ -129,5 +139,5 @@ btnPrev.addEventListener('click', () => {
     }
 });
 
-// Cargar la primera pista automáticamente al iniciar
+// Cargar la primera canción al iniciar
 loadTrack(currentTrackIndex);
