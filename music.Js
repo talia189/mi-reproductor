@@ -87,7 +87,7 @@ const srcPortada = document.getElementById('portada');
 const txtTitulo = document.getElementById('titulo-cancion');
 const txtArtista = document.getElementById('artista-cancion');
 
-// Función para cargar la información e pista
+// Función para cargar la información de la pista
 function loadTrack(index) {
     const track = playlist[index];
     audio.src = track.src;
@@ -96,7 +96,7 @@ function loadTrack(index) {
     txtArtista.textContent = track.artist;
 }
 
-// Función para Alternar entre Reproducir y Pausar
+// Función para alternar entre Reproducir y Pausar
 function togglePlay() {
     if (isPlaying) {
         audio.pause();
