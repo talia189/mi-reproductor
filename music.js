@@ -34,7 +34,7 @@ const playlist = [
     title: "Do You Mind",
     artist: "Galantis",
     src: "./music/Galantis - Do You Mind.mp3",
-    cover: "./Images/love birds.jpg.jpg"
+    cover: "./Images/love birds.jpg"
   },
   {
     title: "AMOR DE CINE",
