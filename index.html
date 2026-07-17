@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -27,14 +28,12 @@
         </div>
 
         <div class="controles">
-            <button class="btn-secundario" onclick="cambiarCancion('prev')">PREV</button>
+            <button id="btnPrev" class="btn-secundario">PREV</button>
             <button id="btnPlay" class="btn-principal">PLAY</button>
-            <button class="btn-secundario" onclick="cambiarCancion('next')">NEXT</button>
+            <button id="btnNext" class="btn-secundario">NEXT</button>
         </div>
         <p id="estado">READY</p>
     </div>
-
-    <audio id="musica"></audio>
 
     <script src="music.js"></script>
 
