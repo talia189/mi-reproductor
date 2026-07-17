@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de reproducción de vinilos</title>
+    <link rel="shortcut icon" href="./Images/music_record_3843.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./Styles/music.css">
+</head>
+<body>
+
+    <div class="reproductor">
+        <div class="visera-disco">
+            <div class="contenedor-de-discoteca" id="discoCont">
+                <div class="vinilo">
+                    <div class="surcos"></div>
+                    <div class="etiqueta">
+                        <img src="./Images/summer eyes portada.jpg" alt="Portada" class="foto-etiqueta" id="portada">
+                        <div class="capa-oscura"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controles">
+            <h2 id="titulo-cancion">SUMMER EYES</h2>
+            <h3 id="artista-cancion">OHYUL</h3>
+            <div class="botones">
+                <button id="btn-prev">Anterior</button>
+                <button id="btn-play">PLAY</button>
+                <button id="btn-next">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="music.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registrado con éxito', reg))
+                    .catch(err => console.error('Error al registrar el Service Worker', err));
+            });
+        }
+    </script>
+</body>
+</html>

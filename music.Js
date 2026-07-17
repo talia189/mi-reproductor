@@ -1,93 +1,133 @@
-const musica = document.getElementById('musica');
-const disco = document.getElementById('discoCont');
-const btnPlay = document.getElementById('btnPlay');
-const tituloC = document.getElementById('tituloC');
-const artistaC = document.getElementById('artistaC');
-const portada = document.getElementById('portada');
-const estado = document.getElementById('estado');
-
-// --- PLAYLIST CONFIGURABLE ---
+// Lista de canciones oficiales para uso local y offline
 const playlist = [
-    {
-        titulo: "SUMMER EYES",
-        artista: "OHYUL",
-        archivo: "music/OHYUL of LNGSHOT - [Summer Eyes] Official Audio - LNGSHOT.mp3",
-        imagen: "Images/summer eyes portada.jpg"
-    },
-    {
-        titulo: "DAWN",
-        artista: "OHYUL",
-        archivo: "https://youtu.be/8FR6cDdINHM?si=oiFTzednAX2SfqWI",
-        imagen: "https://via.placeholder.com/400x400/ff4757/ffffff?text=Dawn"
-    },
-    {
-        titulo: "NIGHT CITY",
-        artista: "LO-FI BEATS",
-        archivo: "link_cancion3.mp3",
-        imagen: "https://via.placeholder.com/400x400/2f3542/ffffff?text=Lo-Fi"
-    }
+  {
+    title: "SUMMER EYES",
+    artist: "OHYUL",
+    src: "./music/OHYUL of LNGSHOT - [Summer Eyes] Official Audio - LNGSHOT.mp3",
+    cover: "./Images/summer eyes portada.jpg"
+  },
+  {
+    title: "As The World Falls Down",
+    artist: "David Bowie",
+    src: "./music/As The World Falls Down - David Bowie.mp3",
+    cover: "./Images/descarga (3).jpg"
+  },
+  {
+    title: "I'd Die For You",
+    artist: "Bon Jovi",
+    src: "./music/Bon Jovi -  I'd Die For You.mp3",
+    cover: "./Images/run.jpg"
+  },
+  {
+    title: "Bed Of Roses",
+    artist: "Bon Jovi",
+    src: "./music/Bon Jovi - Bed Of Roses.mp3",
+    cover: "./Images/flores.jpg",
+  },
+  {
+    title: "In These Arms",
+    artist: "Bon Jovi",
+    src: "./music/Bon Jovi - In These Arms.mp3",
+    cover: "./Images/descarga (10).jpg"
+  },
+  {
+    title: "Do You Mind",
+    artist: "Galantis",
+    src: "./music/Galantis - Do You Mind.mp3",
+    cover: "./Images/love birds.jpg.jpg"
+  },
+  {
+    title: "AMOR DE CINE",
+    artist: "HUMBE",
+    src: "./music/HUMBE - AMOR DE CINE.mp3",
+    cover: "./Images/descarga (5).jpg"
+  },
+  {
+    title: "Prisoner of your eyes",
+    artist: "Judas Priest",
+    src: "./music/Judas Priest - Prisoner of your eyes.mp3",
+    cover: "./Images/descarga (6).jpg"
+  },
+  {
+    title: "Something in the rain",
+    artist: "Rachael Yamagata",
+    src: "./music/Rachael Yamagata  Something in the rain (sub español).mp3",
+    cover: "./Images/descarga (9).jpg"
+  },
+  {
+    title: "Diet mountain dew demo",
+    artist: "lana del rey",
+    src: "./music/scary_ my god, you're divine prt 2  diet mountain dew demo lana del rey (español).mp3",
+    cover: "./Images/descarga (7).jpg"
+  },
+  {
+    title: "About You",
+    artist: "The 1975",
+    src: "./music/The 1975 - About You (Sub. español).mp3",
+    cover: "./Images/Gis De Maeyer, 1942 _ Figurative sculptor.jpg"
+  },
+  {
+    title: "Dear Me",
+    artist: "JUNGWON",
+    src: "./music/Dear Me - (JUNGWON).mp3",
+    cover: "./Images/audifopare.jpg"
+  }
 ];
 
-let indiceActual = 0;
+let currentTrackIndex = 0;
+let isPlaying = false;
+const audio = new Audio();
 
-function cargarCancion(idx) {
-    const c = playlist[idx];
-    tituloC.innerText = c.titulo;
-    artistaC.innerText = c.artista;
-    portada.src = c.imagen;
-    musica.src = c.archivo;
+// Capturar los elementos HTML del reproductor
+const discoCont = document.getElementById('discoCont');
+const btnPlay = document.getElementById('btn-play');
+const btnNext = document.getElementById('btn-next');
+const btnPrev = document.getElementById('btn-prev');
+const srcPortada = document.getElementById('portada');
+const txtTitulo = document.getElementById('titulo-cancion');
+const txtArtista = document.getElementById('artista-cancion');
+
+// Función para cargar la información e pista
+function loadTrack(index) {
+    const track = playlist[index];
+    audio.src = track.src;
+    srcPortada.src = track.cover;
+    txtTitulo.textContent = track.title;
+    txtArtista.textContent = track.artist;
 }
 
-// Carga la primera canción al iniciar
-cargarCancion(indiceActual);
-
-function cambiarCancion(direccion) {
-    // 1. Iniciamos animación de salida
-    disco.classList.add('deslizar-fuera');
-    
-    setTimeout(() => {
-        // 2. Cambiamos de track internamente
-        if (direccion === 'next') {
-            indiceActual = (indiceActual + 1) % playlist.length;
-        } else {
-            indiceActual = (indiceActual - 1 + playlist.length) % playlist.length;
-        }
-        
-        cargarCancion(indiceActual);
-
-        // 3. Reseteamos posición para que entre desde el otro lado
-        disco.classList.remove('deslizar-fuera');
-        disco.classList.add('deslizar-dentro');
-
-        // 4. Animación de entrada
-        setTimeout(() => {
-            disco.classList.remove('deslizar-dentro');
-            
-            // Si el reproductor estaba activo, sigue sonando automáticamente
-            if (btnPlay.innerText === "PAUSE") {
-                musica.play();
-                disco.classList.add('girando');
-            }
-        }, 50);
-
-    }, 600); // 600ms coincide con la transición del CSS
-}
-
-btnPlay.addEventListener('click', () => {
-    if (musica.paused) {
-        musica.play();
-        disco.classList.add('girando');
-        btnPlay.innerText = "PAUSE";
-        estado.innerText = "PLAYING NOW";
-        estado.style.color = "#00d2ff";
+// Función para Alternar entre Reproducir y Pausar
+function togglePlay() {
+    if (isPlaying) {
+        audio.pause();
+        discoCont.classList.remove('girando');
+        btnPlay.textContent = 'PLAY';
     } else {
-        musica.pause();
-        disco.classList.remove('girando');
-        btnPlay.innerText = "PLAY";
-        estado.innerText = "STOPPED";
-        estado.style.color = "#666";
+        audio.play().catch(err => console.log("Error al reproducir audio:", err));
+        discoCont.classList.add('girando');
+        btnPlay.textContent = 'PAUSE';
+    }
+    isPlaying = !isPlaying;
+}
+
+// Eventos de los botones de control
+btnPlay.addEventListener('click', togglePlay);
+
+btnNext.addEventListener('click', () => {
+    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+    loadTrack(currentTrackIndex);
+    if (isPlaying) {
+        audio.play().catch(err => console.log(err));
     }
 });
 
-// Al terminar una canción, pasa a la siguiente
-musica.onended = () => cambiarCancion('next');
+btnPrev.addEventListener('click', () => {
+    currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+    loadTrack(currentTrackIndex);
+    if (isPlaying) {
+        audio.play().catch(err => console.log(err));
+    }
+});
+
+// Cargar la primera pista automáticamente al iniciar
+loadTrack(currentTrackIndex);
